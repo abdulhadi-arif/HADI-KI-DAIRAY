@@ -521,9 +521,10 @@ function makeReadViewStylish(){
 // Auto chal jaye ga
 setInterval(makeReadViewStylish, 1000);
 </script><script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  const firebaseConfig = {
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
   apiKey: "AIzaSyAhG5mO1X-5z2DFMgpoip6p0erYyOZe6Sc",
   authDomain: "hadi-ki-dairay.firebaseapp.com",
   projectId: "hadi-ki-dairay",
@@ -531,7 +532,37 @@ setInterval(makeReadViewStylish, 1000);
   messagingSenderId: "821495126488",
   appId: "1:821495126488:web:c60cb90763982b72da3aad"
 };
-  const app = initializeApp(firebaseConfig);
-  window.db = getFirestore(app);
-  console.log("HADI KI DAIRAY Connected! MashaAllah");
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+window.firebaseDB = db;
+window.firebaseReady = true;
+console.log("HADI KI DAIRAY");
+
+window.saveToFirebase = async function(userId){
+  try {
+    await setDoc(doc(db, "users", userId), {
+      y: localStorage.getItem('y') || '[]',
+      acc: localStorage.getItem('acc') || '[]',
+      savedNames: localStorage.getItem('savedNames') || '[]',
+      savedDetails: localStorage.getItem('savedDetails') || '[]',
+      lastUpdate: Date.now()
+    });
+  } catch(e){ console.log(e); }
+}
+
+window.loadFromFirebase = async function(userId){
+  try {
+    const snap = await getDoc(doc(db, "users", userId));
+    if(snap.exists()){
+      const d = snap.data();
+      if(d.y) localStorage.setItem('y', d.y);
+      if(d.acc) localStorage.setItem('acc', d.acc);
+      if(d.savedNames) localStorage.setItem('savedNames', d.savedNames);
+      if(d.savedDetails) localStorage.setItem('savedDetails', d.savedDetails);
+      return true;
+    }
+  } catch(e){}
+  return false;
+}
 </script></body></html>
