@@ -12,6 +12,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@400;600;800&family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&family=Playfair+Display:wght@400;700&family=Montserrat:wght@400;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="firebase.js"></script>
+<script src="cloud-patch.js"></script>
 <style>
 @font-face{font-family:'Jameel Noori';src:url('https://cdn.jsdelivr.net/gh/mustafaakbari/Jameel-Noori-Nastaleeq@main/Jameel%20Noori%20Nastaleeq.ttf') format('truetype')}
 *{margin:0;padding:0;box-sizing:border-box}html,body{overflow-x:hidden;max-width:100%}body{font-family:Poppins,sans-serif;background:#f1f5f9;color:#0f172a}
@@ -521,88 +525,5 @@ function makeReadViewStylish(){
 // Auto chal jaye ga
 setInterval(makeReadViewStylish, 1000);
 </script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAhG5mO1X-5z2DFMgpoip6p0erYyOZe6Sc",
-  authDomain: "hadi-ki-dairay.firebaseapp.com",
-  projectId: "hadi-ki-dairay",
-  storageBucket: "hadi-ki-dairay.firebasestorage.app",
-  messagingSenderId: "821495126488",
-  appId: "1:821495126488:web:c60cb90763982b72da3aad"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-window.getUserId = function(){ 
-  const m = localStorage.getItem('myMobile')||'user'; 
-  const p = localStorage.getItem('myPass')||'pass'; 
-  return m+'_'+p; 
-}
-
-window.saveToFirebase = async function(){
-  try {
-    const userId = window.getUserId();
-    if(userId==='user_pass') return;
-    await setDoc(doc(db, "users", userId), {
-      y: localStorage.getItem('y') || '[]',
-      acc: localStorage.getItem('acc') || '[]',
-      savedNames: localStorage.getItem('savedNames') || '[]',
-      savedDetails: localStorage.getItem('savedDetails') || '[]',
-      lastUpdate: Date.now()
-    }, {merge:true});
-    console.log("☁️ Saved to cloud:", userId);
-  } catch(e){ console.log("Cloud save error", e); }
-}
-
-window.loadFromFirebase = async function(){
-  try {
-    const userId = window.getUserId();
-    const snap = await getDoc(doc(db, "users", userId));
-    if(snap.exists()){
-      const d = snap.data();
-      if(d.y) localStorage.setItem('y', d.y);
-      if(d.acc) localStorage.setItem('acc', d.acc);
-      if(d.savedNames) localStorage.setItem('savedNames', d.savedNames);
-      if(d.savedDetails) localStorage.setItem('savedDetails', d.savedDetails);
-      console.log("☁️ Loaded from cloud:", userId);
-      return true;
-    }
-  } catch(e){ console.log("Cloud load error", e); }
-  return false;
-}
-
-// === SILENT AUTO PATCH ===
-window.cloudSave = function(){ if(window.saveToFirebase) window.saveToFirebase(); }
-
-// Login pe load
-const _origCheckN = window.checkN;
-window.checkN = async function(){
-  var pp=getP(); if(!pp||v.length===0) return;
-  if(v===pp){
-    document.getElementById('lockScreen').style.display='none'; v=''; upd();
-    if(window.loadFromFirebase){ await window.loadFromFirebase(); loadY(); loadAcc(); loadAccNames(); }
-    setView('home');
-  }else{
-    var e=document.getElementById('err'); e.style.display='block';
-    setTimeout(function(){e.style.display='none';v='';upd();},800);
-  }
-}
-
-// Har save/delete pe auto cloud save - bina koi text dikhaye
-['saveYaad','doFinalSave','saveNameFromInside','deleteName','saveDetailFromInside','deleteDetail','saveEdited','deleteYaad','saveLedgerEdit','deleteLedgerEntry','clearPersonHistory','verifySettingsCode'].forEach(function(fn){
-  const orig = window[fn];
-  if(orig){
-    window[fn] = function(){ 
-      const r = orig.apply(this, arguments); 
-      setTimeout(()=>{ window.cloudSave(); }, 500);
-      return r; 
-    }
-  }
-});
-</script>
 </body>
-</html>
+  </html>
