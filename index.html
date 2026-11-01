@@ -520,7 +520,8 @@ function makeReadViewStylish(){
 
 // Auto chal jaye ga
 setInterval(makeReadViewStylish, 1000);
-</script><script type="module">
+</script>
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -535,24 +536,31 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-window.firebaseDB = db;
-window.firebaseReady = true;
-console.log("HADI KI DAIRAY");
 
-window.saveToFirebase = async function(userId){
+window.getUserId = function(){ 
+  const m = localStorage.getItem('myMobile')||'user'; 
+  const p = localStorage.getItem('myPass')||'pass'; 
+  return m+'_'+p; 
+}
+
+window.saveToFirebase = async function(){
   try {
+    const userId = window.getUserId();
+    if(userId==='user_pass') return;
     await setDoc(doc(db, "users", userId), {
       y: localStorage.getItem('y') || '[]',
       acc: localStorage.getItem('acc') || '[]',
       savedNames: localStorage.getItem('savedNames') || '[]',
       savedDetails: localStorage.getItem('savedDetails') || '[]',
       lastUpdate: Date.now()
-    });
-  } catch(e){ console.log(e); }
+    }, {merge:true});
+    console.log("☁️ Saved to cloud:", userId);
+  } catch(e){ console.log("Cloud save error", e); }
 }
 
-window.loadFromFirebase = async function(userId){
+window.loadFromFirebase = async function(){
   try {
+    const userId = window.getUserId();
     const snap = await getDoc(doc(db, "users", userId));
     if(snap.exists()){
       const d = snap.data();
@@ -560,9 +568,41 @@ window.loadFromFirebase = async function(userId){
       if(d.acc) localStorage.setItem('acc', d.acc);
       if(d.savedNames) localStorage.setItem('savedNames', d.savedNames);
       if(d.savedDetails) localStorage.setItem('savedDetails', d.savedDetails);
+      console.log("☁️ Loaded from cloud:", userId);
       return true;
     }
-  } catch(e){}
+  } catch(e){ console.log("Cloud load error", e); }
   return false;
 }
-</script></body></html>
+
+// === SILENT AUTO PATCH ===
+window.cloudSave = function(){ if(window.saveToFirebase) window.saveToFirebase(); }
+
+// Login pe load
+const _origCheckN = window.checkN;
+window.checkN = async function(){
+  var pp=getP(); if(!pp||v.length===0) return;
+  if(v===pp){
+    document.getElementById('lockScreen').style.display='none'; v=''; upd();
+    if(window.loadFromFirebase){ await window.loadFromFirebase(); loadY(); loadAcc(); loadAccNames(); }
+    setView('home');
+  }else{
+    var e=document.getElementById('err'); e.style.display='block';
+    setTimeout(function(){e.style.display='none';v='';upd();},800);
+  }
+}
+
+// Har save/delete pe auto cloud save - bina koi text dikhaye
+['saveYaad','doFinalSave','saveNameFromInside','deleteName','saveDetailFromInside','deleteDetail','saveEdited','deleteYaad','saveLedgerEdit','deleteLedgerEntry','clearPersonHistory','verifySettingsCode'].forEach(function(fn){
+  const orig = window[fn];
+  if(orig){
+    window[fn] = function(){ 
+      const r = orig.apply(this, arguments); 
+      setTimeout(()=>{ window.cloudSave(); }, 500);
+      return r; 
+    }
+  }
+});
+</script>
+</body>
+</html>
