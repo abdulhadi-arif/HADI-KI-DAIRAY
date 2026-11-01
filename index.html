@@ -520,4 +520,18 @@ function makeReadViewStylish(){
 
 // Auto chal jaye ga
 setInterval(makeReadViewStylish, 1000);
+</script><script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyAhG5mO1X-5z2DFMgpoip6p0erYyOZe6Sc",
+    authDomain: "hadi-ki-dairay.firebaseapp.com",
+    projectId: "hadi-ki-dairay",
+    storageBucket: "hadi-ki-dairay.firebasestorage.app",
+    messagingSenderId: "821495126488",
+    appId: "1:821495126488:web:c60cb90763982b72da3aad"
+  };
+  const app = initializeApp(firebaseConfig);
+  window.db = getFirestore(app);
+  console.log("HADI KI DAIRAY Connected! MashaAllah");
 </script></body></html>
