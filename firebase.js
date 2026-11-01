@@ -1,11 +1,11 @@
-// ===== HADI KI DAIRAY - SILENT CLOUD - firebase.js =====
+// ===== HADI KI DAIRAY - SILENT CLOUD - FINAL firebase.js =====
 const firebaseConfig = {
-  apiKey: "REPLACE_WITH_YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
+  apiKey: "AIzaSyAhG5mO1X-5z2DFMgpoip6p0erYyOZe6Sc",
+  authDomain: "hadi-ki-dairay.firebaseapp.com",
+  projectId: "hadi-ki-dairay",
+  storageBucket: "hadi-ki-dairay.firebasestorage.app",
+  messagingSenderId: "821495126488",
+  appId: "1:821495126488:web:c60cb90763982b72da3aad"
 };
 
 let db = null;
@@ -24,31 +24,33 @@ function getUserId(){
 }
 
 async function cloudSave(){
-  const uid = getUserId();
-  if(!uid || !db) return;
-  const data = {
-    y: localStorage.getItem('y') || '[]',
-    acc: localStorage.getItem('acc') || '[]',
-    savedNames: localStorage.getItem('savedNames') || '[]',
-    savedDetails: localStorage.getItem('savedDetails') || '[]',
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  };
-  await db.collection('users').doc(uid).set(data, {merge:true});
-  console.log("☁️ Saved:", uid);
+  try{
+    const uid = getUserId();
+    if(!uid || !db) return;
+    const payload = {
+      y: localStorage.getItem('y') || '[]',
+      acc: localStorage.getItem('acc') || '[]',
+      savedNames: localStorage.getItem('savedNames') || '[]',
+      savedDetails: localStorage.getItem('savedDetails') || '[]',
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    await db.collection('users').doc(uid).set(payload, {merge:true});
+    console.log("☁️ Saved:", uid);
+  }catch(err){ console.error("cloudSave fail", err); }
 }
 
 async function cloudLoad(){
-  const uid = getUserId();
-  if(!uid || !db) return;
-  const doc = await db.collection('users').doc(uid).get();
-  if(!doc.exists) return;
-  const d = doc.data();
-  if(d.acc) localStorage.setItem('acc', d.acc);
-  if(d.y) localStorage.setItem('y', d.y);
-  if(d.savedNames) localStorage.setItem('savedNames', d.savedNames);
-  if(d.savedDetails) localStorage.setItem('savedDetails', d.savedDetails);
-  console.log("☁️ Loaded from cloud");
-  if(typeof loadY==='function') loadY();
-  if(typeof loadAcc==='function') loadAcc();
-  if(typeof loadAccNames==='function') loadAccNames();
+  try{
+    const uid = getUserId();
+    if(!uid || !db) return;
+    const doc = await db.collection('users').doc(uid).get();
+    if(!doc.exists) return;
+    const d = doc.data();
+    if(d.y) localStorage.setItem('y', d.y);
+    if(d.acc) localStorage.setItem('acc', d.acc);
+    if(d.savedNames) localStorage.setItem('savedNames', d.savedNames);
+    if(d.savedDetails) localStorage.setItem('savedDetails', d.savedDetails);
+    console.log("☁️ Loaded");
+    if(typeof renderHome === 'function') renderHome();
+  }catch(err){ console.error("cloudLoad fail", err); }
 }
