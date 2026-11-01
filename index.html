@@ -21,7 +21,7 @@
 .welcome{position:fixed;inset:0;background:radial-gradient(circle at 50% 30%, var(--primary), #0f172a 70%);z-index:10005;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;color:#fff}
 .bigPic{width:180px;height:180px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 15px 40px rgba(0,0,0,.5);border:5px solid var(--primary)}.bigPic img{width:100%;height:100%;object-fit:cover}
 .openBtn{margin-top:24px;background:#fff;color:#0f172a;border:none;padding:16px 70px;border-radius:30px;font-size:22px;font-weight:900;cursor:pointer}
-.lockS{position:fixed;inset:0;background:#fff;z-index:10003;display:none;flex-direction:column;align-items:center;padding-top:30px}
+.lockS{position:fixed;inset:0;background:#fff;z-index:10003;display:none;flex-direction:column;align-items:center;padding-top:20px;overflow:auto}
 #dots{display:flex;gap:8px;margin:16px 0}.dot{width:14px;height:14px;border-radius:50%;border:2px solid #cbd5e1}.dot.on{background:#0f172a;border-color:#0f172a}
 .numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:280px;margin-top:12px}.numpad button{height:58px;border-radius:14px;border:none;background:#f8fafc;font-size:20px;font-weight:700;cursor:pointer}.numpad .ok{background:#0f172a;color:#fff}.numpad .del{background:#fff;border:1px solid #fee2e2;color:#ef4444}
 .top{height:62px;background:#fff;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:sticky;top:0;z-index:10}
@@ -90,11 +90,29 @@
 .bookActions{padding:14px 14px 16px 14px;background:#fff;border-top:1.5px solid #f1f5f9;flex-shrink:0}
 #editLedgerModal{ z-index:10008 !important; }#editLedgerModal.active{ z-index:10008 !important; display:flex !important; }#historyModal{ z-index:10006 !important; }
 #pdfRender{position:fixed;left:-9999px;top:0;width:800px;background:#fff;z-index:-1}
-</style></head><body>
+.googleBtn{width:92%;max-width:340px;margin-top:14px;background:#fff;color:#0f172a;border:2px solid #e2e8f0;padding:13px;border-radius:14px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+.googleBtn img{width:20px;height:20px}
+</style>
+</head><body>
 <div id="toast" class="toast"></div>
 <div id="welcome" class="welcome"><div class="bigPic"><img src="icon-512.png" alt="AH Logo"></div><h1 style="margin-top:14px">ABDUL HADI</h1><button class="openBtn" onclick="openSetup()">OPEN</button></div>
 <div id="setup" style="position:fixed;inset:0;background:#fff;z-index:10004;display:none;flex-direction:column;padding:20px;overflow:auto"><h2 style="text-align:center">Create Password</h2><input id="setupPass" type="tel" maxlength="8" placeholder="Password 4-8" style="width:100%;height:52px;border:2px solid #e2e8f0;border-radius:14px;text-align:center;margin-top:12px"><input id="setupPass2" type="tel" maxlength="8" placeholder="Confirm" style="width:100%;height:52px;border:2px solid #e2e8f0;border-radius:14px;text-align:center;margin-top:12px"><input id="setupMobile" type="tel" maxlength="11" placeholder="Mobile 03XX" style="width:100%;height:52px;border:2px solid #e2e8f0;border-radius:14px;text-align:center;margin-top:12px"><p id="setupMsg" style="display:none;text-align:center;margin-top:8px;font-weight:700"></p><button class="btn" onclick="saveSetup()">Save</button><button onclick="backToWelcome()" style="width:100%;margin-top:8px;padding:12px;border-radius:12px;border:1px solid #e2e8f0;background:#fff">Back</button></div>
-<div id="lockScreen" class="lockS"><div style="width:90px;height:90px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;border:3px solid var(--primary)"><img src="icon-192.png" style="width:100%;height:100%;object-fit:cover"></div><h2 style="margin-top:12px">HADI KI DAIRAY</h2><div id="dots"><div class="dot" id="d0"></div><div class="dot" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div><div class="dot" id="d4"></div><div class="dot" id="d5"></div><div class="dot" id="d6"></div><div class="dot" id="d7"></div></div><p id="err" style="color:#ef4444;display:none;font-weight:700">Wrong</p><div class="numpad"><button onclick="addN('1')">1</button><button onclick="addN('2')">2</button><button onclick="addN('3')">3</button><button onclick="addN('4')">4</button><button onclick="addN('5')">5</button><button onclick="addN('6')">6</button><button onclick="addN('7')">7</button><button onclick="addN('8')">8</button><button onclick="addN('9')">9</button><button onclick="delN()" class="del">⌫</button><button onclick="addN('0')">0</button><button onclick="checkN()" class="ok">✔</button></div><button onclick="openForget()" style="margin-top:12px;background:none;border:none;color:#2563eb;font-weight:700">Forget?</button><div id="forgetBox" style="display:none;width:92%;max-width:340px;margin-top:12px;background:#f8fafc;padding:14px;border-radius:14px;border:2px solid var(--primary)"><input id="forgetMobile" type="tel" placeholder="Registered Mobile" style="width:100%;height:44px;border:1px solid #e2e8f0;border-radius:8px;padding:0 10px"><button onclick="sendCodeForget()" style="width:100%;margin-top:8px;background:#0f172a;color:#fff;border:none;padding:10px;border-radius:10px">Send Code</button><div id="codeInputBox" style="display:none"><input id="codeInput" type="tel" maxlength="6" placeholder="Code" style="width:100%;height:48px;border:2px solid var(--primary);border-radius:10px;text-align:center;margin-top:12px;letter-spacing:6px"><button onclick="verifyCodeForget()" style="width:100%;margin-top:8px;background:var(--primary);color:#fff;border:none;padding:12px;border-radius:10px">Verify</button></div><p id="forgetMsg" style="display:none;text-align:center;margin-top:8px;font-weight:700"></p></div></div>
+
+<div id="lockScreen" class="lockS">
+<div style="width:90px;height:90px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;border:3px solid var(--primary)"><img src="icon-192.png" style="width:100%;height:100%;object-fit:cover"></div>
+<h2 style="margin-top:12px">HADI KI DAIRAY</h2>
+<div id="dots"><div class="dot" id="d0"></div><div class="dot" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div><div class="dot" id="d4"></div><div class="dot" id="d5"></div><div class="dot" id="d6"></div><div class="dot" id="d7"></div></div>
+<p id="err" style="color:#ef4444;display:none;font-weight:700">Wrong</p>
+<div class="numpad"><button onclick="addN('1')">1</button><button onclick="addN('2')">2</button><button onclick="addN('3')">3</button><button onclick="addN('4')">4</button><button onclick="addN('5')">5</button><button onclick="addN('6')">6</button><button onclick="addN('7')">7</button><button onclick="addN('8')">8</button><button onclick="addN('9')">9</button><button onclick="delN()" class="del">⌫</button><button onclick="addN('0')">0</button><button onclick="checkN()" class="ok">✔</button></div>
+<button onclick="openForget()" style="margin-top:12px;background:none;border:none;color:#2563eb;font-weight:700">Forget?</button>
+
+<button id="googleLoginBtn" class="googleBtn" onclick="loginWithGoogle()">
+<img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="G" style="border-radius:50%"> Google se Login
+</button>
+<p id="googleMsg" style="display:none;text-align:center;margin-top:8px;font-weight:700;font-size:12px"></p>
+
+<div id="forgetBox" style="display:none;width:92%;max-width:340px;margin-top:12px;background:#f8fafc;padding:14px;border-radius:14px;border:2px solid var(--primary)"><input id="forgetMobile" type="tel" placeholder="Registered Mobile" style="width:100%;height:44px;border:1px solid #e2e8f0;border-radius:8px;padding:0 10px"><button onclick="sendCodeForget()" style="width:100%;margin-top:8px;background:#0f172a;color:#fff;border:none;padding:10px;border-radius:10px">Send Code</button><div id="codeInputBox" style="display:none"><input id="codeInput" type="tel" maxlength="6" placeholder="Code" style="width:100%;height:48px;border:2px solid var(--primary);border-radius:10px;text-align:center;margin-top:12px;letter-spacing:6px"><button onclick="verifyCodeForget()" style="width:100%;margin-top:8px;background:var(--primary);color:#fff;border:none;padding:12px;border-radius:10px">Verify</button></div><p id="forgetMsg" style="display:none;text-align:center;margin-top:8px;font-weight:700"></p></div>
+</div>
 <div id="readModal" class="bookFullModal"><div class="bookPage"><div class="bookTop"><div style="flex:1;min-width:0"><div id="readHeadView" class="bookTitle f-urdu1" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div><input id="readHead" class="editInput" style="display:none"><small id="readDate" class="bookDate"></small></div><button class="bookClose" onclick="closeRead()">✕</button></div><div class="bookZoomWrap" id="bookZoomWrap"><div class="bookZoomInner" id="bookZoomInner"><div class="bookTextArea"><textarea id="readTextEdit" class="editInput" style="min-height:280px;display:none;font-size:20px;line-height:2"></textarea><p id="readTextView" class="f-urdu1"></p></div><div class="blueLeavesFooter"><svg viewBox="0 0 400 110" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg"><g opacity="0.85"><path d="M20 85 Q35 60 38 25" stroke="#94a3b8" stroke-width="1.8" fill="none"/><ellipse cx="38" cy="26" rx="13" ry="7" fill="#cbd5e1" transform="rotate(-15 38 26)"/><ellipse cx="52" cy="40" rx="15" ry="8" fill="#94a3b8" transform="rotate(10 52 40)"/><path d="M120 95 Q140 70 148 20" stroke="#1e293b" stroke-width="2" fill="none"/><ellipse cx="150" cy="22" rx="12" ry="18" fill="#334155" transform="rotate(12 150 22)"/><ellipse cx="128" cy="50" rx="20" ry="9" fill="#1e293b" transform="rotate(-18 128 50)"/><ellipse cx="160" cy="58" rx="18" ry="9" fill="#475569" transform="rotate(20 160 58)"/></g></svg></div></div></div><div class="bookActions"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><button onclick="toggleEdit()" style="height:54px;border-radius:14px;border:none;background:#0f172a;color:#fff;font-weight:800">✏️ Edit</button><button onclick="downloadBookPDF()" style="height:54px;border-radius:14px;border:none;background:linear-gradient(135deg, var(--primary), #22c55e);color:#fff;font-weight:800">↓ PDF</button></div><button id="saveEditBtn" onclick="saveEdited()" style="width:100%;margin-top:10px;background:var(--primary);color:#fff;border:none;padding:12px;border-radius:12px;font-weight:800;display:none">Save Changes</button><button id="readDel" onclick="deleteYaad()" style="width:100%;height:48px;border-radius:14px;border:1.5px solid #fee2e2;background:#fff1f2;color:#ef4444;font-weight:800;margin-top:10px">Delete</button></div></div></div>
 <div id="historyModal" class="historyModal" onclick="if(event.target===this)this.classList.remove('active')"><div class="historyBox"><div class="historyHead"><div><h3 id="historyName">History</h3><small style="opacity:.7">Ledger Statement</small></div><button onclick="document.getElementById('historyModal').classList.remove('active')" style="border:none;background:rgba(255,255,255,.2);color:#fff;width:36px;height:36px;border-radius:50%">✕</button></div><div class="historyStats"><div class="stat"><small>TOTAL SEND</small><b id="hTotalSend" style="color:#ef4444">0</b></div><div class="stat"><small>TOTAL RECEIVE</small><b id="hTotalReceive" style="color:#16a34a">0</b></div><div class="stat"><small>NET BALANCE</small><b id="hTotalBal">0</b></div></div><div style="overflow:auto;flex:1"><table class="excel-table" id="historyTable"><thead><tr><th>DATE</th><th>DETAILS</th><th>SEND</th><th>RECEIVE</th><th>BAL</th></tr></thead><tbody></tbody></table></div><div class="historyActions"><button onclick="downloadPersonPDF()" class="btnPro btnDark">↓ PDF</button><button onclick="clearPersonHistory()" class="btnPro btnLight">Delete All</button></div></div></div>
 <div id="editLedgerModal" class="historyModal" onclick="if(event.target===this)this.classList.remove('active')"><div class="historyBox" style="max-width:380px"><div class="historyHead"><h3>Edit Entry</h3><button onclick="document.getElementById('editLedgerModal').classList.remove('active')" style="border:none;background:rgba(255,255,255,.2);color:#fff;width:36px;height:36px;border-radius:50%">✕</button></div><div style="padding:20px"><label style="font-weight:800;font-size:11px;color:#64748b">AMOUNT</label><input id="editLedgerAmount" type="number" style="width:100%;height:52px;border:2px solid #e2e8f0;border-radius:14px;padding:0 14px;font-size:18px;font-weight:800;margin-top:6px;box-sizing:border-box"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px"><div><label style="font-weight:800;font-size:11px;color:#64748b">DATE</label><input id="editLedgerDate" type="date" style="width:100%;height:48px;border:1.8px solid #e2e8f0;border-radius:12px;padding:0 10px;margin-top:4px;box-sizing:border-box"></div><div><label style="font-weight:800;font-size:11px;color:#64748b">DETAILS</label><input id="editLedgerDetails" type="text" placeholder="Enter.." style="width:100%;height:48px;border:1.8px solid #e2e8f0;border-radius:12px;padding:0 10px;margin-top:4px;box-sizing:border-box"></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px"><button id="editTypeSend" onclick="setEditType('diye')" style="height:48px;border-radius:12px;border:1.5px solid #fecaca;background:#fef2f2;color:#b91c1c;font-weight:800">↑ SEND</button><button id="editTypeReceive" onclick="setEditType('liye')" style="height:48px;border-radius:12px;border:1.5px solid #bbf7d0;background:#f0fdf4;color:#15803d;font-weight:800">↓ RECEIVE</button></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px"><button onclick="saveLedgerEdit()" style="height:52px;border-radius:14px;border:none;background:#0f172a;color:#fff;font-weight:800">Save</button><button onclick="deleteLedgerEntry()" style="height:52px;border-radius:14px;border:1.5px solid #fee2e2;background:#fff;color:#ef4444;font-weight:800">Delete</button></div></div></div></div>
@@ -188,6 +206,64 @@
 </div>
 </div>
 <div id="pdfRender" style="position:fixed;left:-9999px;top:0;width:800px;background:#fff;z-index:-1"></div>
+<script type="module">
+// Firebase Google Login Fix
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAhG5mO1X-5z2DFMgpoip6p0erYyOZe6Sc",
+  authDomain: "hadi-ki-dairay.firebaseapp.com",
+  projectId: "hadi-ki-dairay",
+  storageBucket: "hadi-ki-dairay.firebasestorage.app",
+  messagingSenderId: "821495126488",
+  appId: "1:821495126488:web:c60cb90763982b72da3aad"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+getRedirectResult(auth).then((result)=>{
+  if(result && result.user){
+    unlockWithGoogle(result.user);
+  }
+}).catch(e=>{ console.log(e); });
+
+window.loginWithGoogle = async function(){
+  const msg = document.getElementById('googleMsg');
+  msg.style.display='block';
+  msg.style.color='#2563eb';
+  msg.innerText='Google khul raha hai...';
+  try{
+    const result = await signInWithPopup(auth, provider);
+    unlockWithGoogle(result.user);
+  }catch(err){
+    console.log("Popup failed, trying redirect", err);
+    try{
+      await signInWithRedirect(auth, provider);
+    }catch(e2){
+      msg.style.color='#ef4444';
+      msg.innerText='Error: '+e2.message;
+    }
+  }
+}
+
+function unlockWithGoogle(user){
+  const msg = document.getElementById('googleMsg');
+  msg.style.display='block';
+  msg.style.color='#16a34a';
+  msg.innerText='Welcome '+(user.displayName||user.email)+'! Khul raha hai...';
+  localStorage.setItem('googleUser', JSON.stringify({email:user.email, name:user.displayName, uid:user.uid}));
+  setTimeout(()=>{
+    document.getElementById('lockScreen').style.display='none';
+    document.getElementById('welcome').style.display='none';
+    if(typeof v !== 'undefined'){ v=''; if(window.upd) window.upd(); }
+    if(window.setView) setView('home');
+  },800);
+}
+</script>
+
 <script>
 var currentFont='f-urdu1';var currentReadId=null;var v='';var generatedCode='';var currentHistoryName='';var settingsCode='';var pendingMobile='';var pendingPass='';var editorLang='ur';var selectedName='';var selectedDetail='';var bookZoom=1;let deferredPrompt=null;var editLedgerId=null;var editLedgerType='diye';var tempThemeColor='#16a34a';var lastSaveType='receive';
 function getP(){return localStorage.getItem('myPass');}function getM(){return localStorage.getItem('myMobile');}
@@ -196,7 +272,7 @@ function openSetup(){var p=getP();document.getElementById('welcome').style.displ
 function saveSetup(){var p=document.getElementById('setupPass').value.trim();var p2=document.getElementById('setupPass2').value.trim();var m=document.getElementById('setupMobile').value.trim();var msg=document.getElementById('setupMsg');if(p.length<4||p.length>8){msg.style.display='block';msg.style.color='#ef4444';msg.innerText='4-8 digit!';return;}if(p!==p2){msg.style.display='block';msg.style.color='#ef4444';msg.innerText='Not match!';return;}if(m.length<10){msg.style.display='block';msg.style.color='#ef4444';msg.innerText='Mobile!';return;}localStorage.setItem('myPass',p);localStorage.setItem('myMobile',m);msg.style.display='block';msg.style.color='#16a34a';msg.innerText='Done!';setTimeout(function(){document.getElementById('setup').style.display='none';document.getElementById('lockScreen').style.display='flex';v='';upd();},600);}
 function addN(n){var pp=getP();var maxLen=pp?pp.length:8;if(!maxLen||maxLen<4)maxLen=8;if(v.length>=maxLen)return;v+=n;upd();}function delN(){v=v.slice(0,-1);upd();}
 function upd(){var pp=getP();var maxLen=pp?pp.length:8;if(!maxLen||maxLen<4)maxLen=8;for(var i=0;i<8;i++){var el=document.getElementById('d'+i);if(!el)continue;if(i<maxLen){el.style.display='block';if(i<v.length){el.classList.add('on');}else{el.classList.remove('on');}}else{el.style.display='none';}}}
-function checkN(){var pp=getP();if(!pp){showToast('Set password');return;}if(v.length===0){showToast('Enter password');return;}if(v===pp){document.getElementById('lockScreen').style.display='none';v='';upd();setView('home');showToast('Welcome!');}else{var e=document.getElementById('err');e.style.display='block';setTimeout(function(){e.style.display='none';v='';upd();},800);}}
+function checkN(){var pp=getP();if(!pp){return;}if(v.length===0){return;}if(v===pp){document.getElementById('lockScreen').style.display='none';v='';upd();setView('home');}else{var e=document.getElementById('err');e.style.display='block';setTimeout(function(){e.style.display='none';v='';upd();},800);}}
 function openForget(){var box=document.getElementById('forgetBox');box.style.display=box.style.display==='none'?'block':'none';}
 function sendCodeForget(){var m=document.getElementById('forgetMobile').value.trim();var msg=document.getElementById('forgetMsg');if(m!==getM()){msg.style.display='block';msg.style.color='#ef4444';msg.innerText='Wrong mobile!';return;}generatedCode=Math.floor(100000+Math.random()*900000).toString();msg.style.display='block';msg.style.color='#16a34a';msg.innerHTML='Code: <b style="font-size:22px;letter-spacing:6px">'+generatedCode+'</b>';document.getElementById('codeInputBox').style.display='block';}
 function verifyCodeForget(){var c=document.getElementById('codeInput').value.trim();if(c===generatedCode){document.getElementById('lockScreen').style.display='none';document.getElementById('forgetBox').style.display='none';v='';upd();setView('home');}}
@@ -206,31 +282,29 @@ function openMenu(){document.getElementById('menuSheet').classList.add('show')}f
 function setView(view){document.getElementById('homeView').style.display='none';document.getElementById('bookView').style.display='none';document.getElementById('accountView').style.display='none';document.getElementById('accountNamesView').style.display='none';document.getElementById('settingsView').style.display='none';var nameMap={home:'Home',book:'Book',account:'Accounting',accountNames:'HISAB - All Names',settings:'Settings'};document.getElementById('topPageName').innerText=nameMap[view]||'HADI KI DAIRAY';var sw=document.getElementById('searchWrap');if(sw) sw.style.display=view==='home'?'block':'none';if(view==='home'){document.getElementById('homeView').style.display='block';loadY();}if(view==='book'){document.getElementById('bookView').style.display='block';}if(view==='account'){document.getElementById('accountView').style.display='block';loadAcc();refreshNameDropdown();refreshDetailsDropdown();}if(view==='accountNames'){document.getElementById('accountNamesView').style.display='block';loadAccNames();}if(view==='settings'){document.getElementById('settingsView').style.display='block';}}
 function setEditorLang(l){editorLang=l;var u=document.getElementById('dirUrdu');var e=document.getElementById('dirEng');if(l==='ur'){u.classList.add('active');u.classList.remove('inactive');e.classList.add('inactive');e.classList.remove('active');document.getElementById('urduFontWrap').style.display='block';document.getElementById('engFontWrap').style.display='none';if(!currentFont.startsWith('f-urdu')) selectFont('f-urdu1','Jameel Noori Nastaleeq');}else{e.classList.add('active');e.classList.remove('inactive');u.classList.add('inactive');u.classList.remove('active');document.getElementById('urduFontWrap').style.display='none';document.getElementById('engFontWrap').style.display='block';if(!currentFont.startsWith('f-eng')) selectFont('f-eng1','Poppins');}applyFont();}
 function toggleFontDrop(type){if(type==='urdu'){document.getElementById('urduFontList').classList.toggle('show');document.getElementById('engFontList').classList.remove('show');}else{document.getElementById('engFontList').classList.toggle('show');document.getElementById('urduFontList').classList.remove('show');}}
-function selectFont(fontClass, fontName){currentFont=fontClass;localStorage.setItem('selFont',fontClass);if(fontClass.startsWith('f-urdu')){document.getElementById('urduFontBtnText').innerText=fontName;document.getElementById('urduFontBtnText').className=fontClass;}else{document.getElementById('engFontBtnText').innerText=fontName;document.getElementById('engFontBtnText').className=fontClass;}document.getElementById('urduFontList').classList.remove('show');document.getElementById('engFontList').classList.remove('show');applyFont();showToast('Font: '+fontName);}
+function selectFont(fontClass, fontName){currentFont=fontClass;localStorage.setItem('selFont',fontClass);if(fontClass.startsWith('f-urdu')){document.getElementById('urduFontBtnText').innerText=fontName;document.getElementById('urduFontBtnText').className=fontClass;}else{document.getElementById('engFontBtnText').innerText=fontName;document.getElementById('engFontBtnText').className=fontClass;}document.getElementById('urduFontList').classList.remove('show');document.getElementById('engFontList').classList.remove('show');applyFont();}
 function applyFont(){var h=document.getElementById('headInput');var t=document.getElementById('yaadInput');if(h){h.className='bookInput '+currentFont;}if(t){t.className='bookTextarea '+currentFont;}}
-function saveYaad(){var h=document.getElementById('headInput').value.trim();var t=document.getElementById('yaadInput').value.trim();if(!h||!t){alert('Heading+Story required!');return;}var a=JSON.parse(localStorage.getItem('y')||'[]');a.unshift({id:Date.now(),heading:h,text:t,date:new Date().toLocaleString(),ts:Date.now(),font:currentFont,lang:editorLang});localStorage.setItem('y',JSON.stringify(a));document.getElementById('headInput').value='';document.getElementById('yaadInput').value='';loadY();setView('home');showToast('Saved Dairay!');}
+function saveYaad(){var h=document.getElementById('headInput').value.trim();var t=document.getElementById('yaadInput').value.trim();if(!h||!t){alert('Heading+Story required!');return;}var a=JSON.parse(localStorage.getItem('y')||'[]');a.unshift({id:Date.now(),heading:h,text:t,date:new Date().toLocaleString(),ts:Date.now(),font:currentFont,lang:editorLang});localStorage.setItem('y',JSON.stringify(a));document.getElementById('headInput').value='';document.getElementById('yaadInput').value='';loadY();setView('home');}
 function doSearch(){loadY();}
 function loadY(){var a=JSON.parse(localStorage.getItem('y')||'[]');var q=document.getElementById('searchInput').value.toLowerCase().trim();var f=a;if(q) f=f.filter(function(x){return x.heading.toLowerCase().indexOf(q)>=0||x.text.toLowerCase().indexOf(q)>=0});document.getElementById('c').innerText=f.length;var l=document.getElementById('list');l.innerHTML='';for(var i=0;i<f.length;i++){var y=f[i];var div=document.createElement('div');div.className='note '+(y.font||'f-urdu1');(function(id){div.onclick=function(){openRead(id);}})(y.id);div.innerHTML='<h4 class="'+(y.font||'f-urdu1')+'">'+y.heading+'</h4><span style="color:var(--primary)">›</span>';l.appendChild(div);}}
 function openRead(id){var a=JSON.parse(localStorage.getItem('y')||'[]');var y=null;for(var i=0;i<a.length;i++) if(a[i].id===id){y=a[i];break;}if(!y) return;currentReadId=id;document.getElementById('readHeadView').innerText=y.heading;document.getElementById('readHeadView').className='bookTitle '+(y.font||'f-urdu1');document.getElementById('readHead').value=y.heading;document.getElementById('readDate').innerText=y.date;document.getElementById('readTextView').innerText=y.text;document.getElementById('readTextView').className=(y.font||'f-urdu1');document.getElementById('readTextEdit').value=y.text;document.getElementById('readTextEdit').className='editInput '+(y.font||'f-urdu1');document.getElementById('readModal').classList.add('show');}
 function toggleEdit(){var hv=document.getElementById('readHeadView');var he=document.getElementById('readHead');var tv=document.getElementById('readTextView');var te=document.getElementById('readTextEdit');var sb=document.getElementById('saveEditBtn');var isEditing=he.style.display!=='none';if(!isEditing){hv.style.display='none';tv.style.display='none';he.style.display='block';te.style.display='block';sb.style.display='block';}else{hv.style.display='block';tv.style.display='block';he.style.display='none';te.style.display='none';sb.style.display='none';}}
-function saveEdited(){var a=JSON.parse(localStorage.getItem('y')||'[]');for(var i=0;i<a.length;i++) if(a[i].id===currentReadId){a[i].heading=document.getElementById('readHead').value;a[i].text=document.getElementById('readTextEdit').value;break;}localStorage.setItem('y',JSON.stringify(a));var hv=document.getElementById('readHeadView');hv.innerText=document.getElementById('readHead').value;document.getElementById('readTextView').innerText=document.getElementById('readTextEdit').value;toggleEdit();loadY();showToast('Updated');}
+function saveEdited(){var a=JSON.parse(localStorage.getItem('y')||'[]');for(var i=0;i<a.length;i++) if(a[i].id===currentReadId){a[i].heading=document.getElementById('readHead').value;a[i].text=document.getElementById('readTextEdit').value;break;}localStorage.setItem('y',JSON.stringify(a));var hv=document.getElementById('readHeadView');hv.innerText=document.getElementById('readHead').value;document.getElementById('readTextView').innerText=document.getElementById('readTextEdit').value;toggleEdit();loadY();}
 function closeRead(){document.getElementById('readModal').classList.remove('show');}
-function showToast(msg){ return; }
-function saveNameFromInside(){var n=document.getElementById('newNameInside').value.trim();if(!n){alert('Enter name!');return;}if(n.toLowerCase()==='all'){alert('Cannot use All!');return;}var saved=JSON.parse(localStorage.getItem('savedNames')||'[]');for(var i=0;i<saved.length;i++) if(saved[i].toLowerCase()===n.toLowerCase()){showToast('Already exists');return;}saved.push(n);localStorage.setItem('savedNames',JSON.stringify(saved));document.getElementById('newNameInside').value='';refreshNameDropdown();loadAcc();loadAccNames();showToast('Saved: '+n);}
+function saveNameFromInside(){var n=document.getElementById('newNameInside').value.trim();if(!n){alert('Enter name!');return;}if(n.toLowerCase()==='all'){alert('Cannot use All!');return;}var saved=JSON.parse(localStorage.getItem('savedNames')||'[]');for(var i=0;i<saved.length;i++) if(saved[i].toLowerCase()===n.toLowerCase()){return;}saved.push(n);localStorage.setItem('savedNames',JSON.stringify(saved));document.getElementById('newNameInside').value='';refreshNameDropdown();loadAcc();loadAccNames();}
 function refreshNameDropdown(){var saved=JSON.parse(localStorage.getItem('savedNames')||'[]');var cont=document.getElementById('savedNamesContainer');if(!cont) return;cont.innerHTML='';for(var i=0;i<saved.length;i++){(function(name){var div=document.createElement('div');div.className='name-item';div.innerHTML='<span style="flex:1;display:flex;align-items:center;gap:10px;min-width:0" onclick="selectName(\''+name.replace(/'/g,"\\'")+'\')"><span style="width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg, #e0f2fe, #bae6fd);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px">👤</span><span style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;font-size:13px">'+name+'</span></span><button class="delNameBtn" onclick="event.stopPropagation();deleteName(\''+name.replace(/'/g,"\\'")+'\')">✕</button>';cont.appendChild(div);})(saved[i]);}if(saved.length>0){var allDiv=document.createElement('div');allDiv.className='name-item all';allDiv.innerHTML='<span style="flex:1;display:flex;align-items:center;gap:8px" onclick="selectName(\'All\')"><span style="width:32px;height:32px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0">🌟</span><span>ALL۔۔👤</span></span>';cont.appendChild(allDiv);}if(saved.length===0){cont.innerHTML='<div style="padding:14px;text-align:center;color:#94a3b8;font-size:12px">No names..</div>';}}
 function toggleNameDropdown(){var dd=document.getElementById('nameDropdown');var dd2=document.getElementById('detailsDropdown');if(dd2) dd2.classList.remove('show');dd.classList.toggle('show');if(dd.classList.contains('show')) refreshNameDropdown();}
-function selectName(name){selectedName=name;var main=document.getElementById('selectedNameText');var sub=document.getElementById('selectedNameSub');if(name==='All'){main.innerText='🌟 ALL - All Names';sub.innerText='Amount...';}else{main.innerText=name;sub.innerText='Selected • Tap to change';}document.getElementById('nameDropdown').classList.remove('show');showToast('Selected: '+name);}
-function deleteName(name){if(!confirm(name+' delete?')) return;var saved=JSON.parse(localStorage.getItem('savedNames')||'[]');saved=saved.filter(function(n){return n!==name});localStorage.setItem('savedNames',JSON.stringify(saved));if(selectedName===name){selectedName='';document.getElementById('selectedNameText').innerText='Choose person...';document.getElementById('selectedNameSub').innerText='Tap to select from list';}refreshNameDropdown();loadAcc();loadAccNames();showToast('Deleted: '+name);}
+function selectName(name){selectedName=name;var main=document.getElementById('selectedNameText');var sub=document.getElementById('selectedNameSub');if(name==='All'){main.innerText='🌟 ALL - All Names';sub.innerText='Amount...';}else{main.innerText=name;sub.innerText='Selected • Tap to change';}document.getElementById('nameDropdown').classList.remove('show');}
+function deleteName(name){if(!confirm(name+' delete?')) return;var saved=JSON.parse(localStorage.getItem('savedNames')||'[]');saved=saved.filter(function(n){return n!==name});localStorage.setItem('savedNames',JSON.stringify(saved));if(selectedName===name){selectedName='';document.getElementById('selectedNameText').innerText='Choose person...';document.getElementById('selectedNameSub').innerText='Tap to select from list';}refreshNameDropdown();loadAcc();loadAccNames();}
 function saveDetailFromInside(){
   var n=document.getElementById('newDetailInside').value.trim();
   if(!n){alert('Enter detail!');return;}
   var saved=JSON.parse(localStorage.getItem('savedDetails')||'[]');
-  for(var i=0;i<saved.length;i++) if(saved[i].toLowerCase()===n.toLowerCase()){showToast('Already exists');return;}
+  for(var i=0;i<saved.length;i++) if(saved[i].toLowerCase()===n.toLowerCase()){return;}
   saved.push(n);
   localStorage.setItem('savedDetails',JSON.stringify(saved));
   document.getElementById('newDetailInside').value='';
   refreshDetailsDropdown();
-  showToast('Saved Detail: '+n);
 }
 function refreshDetailsDropdown(){
   var saved=JSON.parse(localStorage.getItem('savedDetails')||'[]');
@@ -247,10 +321,9 @@ function refreshDetailsDropdown(){
   if(saved.length===0) cont.innerHTML='<div style="padding:14px;text-align:center;color:#94a3b8;font-size:12px">No details yet..</div>';
 }
 function toggleDetailsDropdown(){var dd=document.getElementById('detailsDropdown');var dd2=document.getElementById('nameDropdown');if(dd2) dd2.classList.remove('show');dd.classList.toggle('show');if(dd.classList.contains('show')) refreshDetailsDropdown();}
-function selectDetail(name){selectedDetail=name;document.getElementById('selectedDetailsText').innerText=name;document.getElementById('selectedDetailsSub').innerText='Selected';document.getElementById('detailsDropdown').classList.remove('show');showToast('Detail: '+name);}
-function deleteDetail(name){if(!confirm(name+' delete?')) return;var saved=JSON.parse(localStorage.getItem('savedDetails')||'[]');saved=saved.filter(function(n){return n!==name});localStorage.setItem('savedDetails',JSON.stringify(saved));if(selectedDetail===name){selectedDetail='';document.getElementById('selectedDetailsText').innerText='DETAIL...';document.getElementById('selectedDetailsSub').innerText='Tap to select';}refreshDetailsDropdown();showToast('Deleted Detail: '+name);}
+function selectDetail(name){selectedDetail=name;document.getElementById('selectedDetailsText').innerText=name;document.getElementById('selectedDetailsSub').innerText='Selected';document.getElementById('detailsDropdown').classList.remove('show');}
+function deleteDetail(name){if(!confirm(name+' delete?')) return;var saved=JSON.parse(localStorage.getItem('savedDetails')||'[]');saved=saved.filter(function(n){return n!==name});localStorage.setItem('savedDetails',JSON.stringify(saved));if(selectedDetail===name){selectedDetail='';document.getElementById('selectedDetailsText').innerText='DETAIL...';document.getElementById('selectedDetailsSub').innerText='Tap to select';}refreshDetailsDropdown();}
 function formatShortDate(d){var m=d.getMonth()+1;var day=d.getDate();var y=String(d.getFullYear()).slice(-2);return m+'/'+day+'/'+y;}
-
 function selectAccType(type){
   lastSaveType=type;
   var r=document.querySelector('.accReceive');
@@ -260,13 +333,11 @@ function selectAccType(type){
   if(type==='receive' && r) r.classList.add('active');
   if(type==='send' && s) s.classList.add('active');
 }
-function doFinalSave(){
-  saveDirect(lastSaveType);
-}
+function doFinalSave(){ saveDirect(lastSaveType); }
 function saveDirect(type){
   if(type) lastSaveType=type;
   else type=lastSaveType;
-  if(!selectedName){showToast('Name select karo!');toggleNameDropdown();return;}
+  if(!selectedName){toggleNameDropdown();return;}
   var amVal=document.getElementById('accAmount').value.trim();if(!amVal){alert('Amount likho!');return;}
   var am=parseFloat(amVal);if(isNaN(am)||am<=0){alert('Valid amount!');return;}
   var dateInput=document.getElementById('accDate').value;
@@ -278,10 +349,10 @@ function saveDirect(type){
   if(selectedName==='All'){
     var saved=JSON.parse(localStorage.getItem('savedNames')||'[]');if(saved.length===0){alert('No names!');return;}
     for(var i=0;i<saved.length;i++){a.unshift({id:Date.now()+i+Math.random(), name:saved[i], amount:am, type:(type==='send'?'diye':'liye'), date:displayDate, ts:ts, details:detailsInput});}
-    localStorage.setItem('acc',JSON.stringify(a));showToast((type==='send'?'Send':'Receive')+' to ALL: '+am);
+    localStorage.setItem('acc',JSON.stringify(a));
   }else{
     a.unshift({id:Date.now(), name:selectedName, amount:am, type:(type==='send'?'diye':'liye'), date:displayDate, ts:ts, details:detailsInput});
-    localStorage.setItem('acc',JSON.stringify(a));showToast((type==='send'?'Send to ':'Receive from ')+selectedName+': '+am);
+    localStorage.setItem('acc',JSON.stringify(a));
   }
   document.getElementById('accAmount').value='';
   selectedDetail='';document.getElementById('selectedDetailsText').innerText='DETAIL...';document.getElementById('selectedDetailsSub').innerText='Tap Select';
@@ -292,10 +363,31 @@ function loadAccNames(){var a=JSON.parse(localStorage.getItem('acc')||'[]');var 
 function openHistory(name){currentHistoryName=name;var a=JSON.parse(localStorage.getItem('acc')||'[]');var filtered=a.filter(function(x){return x.name===name;}).sort(function(a,b){return a.ts-b.ts;});var tbody=document.querySelector('#historyTable tbody');tbody.innerHTML='';var bal=0;var tSend=0;var tReceive=0;function shortDate(ts,fallback){if(ts){var d=new Date(ts);return (d.getMonth()+1)+'/'+d.getDate()+'/'+String(d.getFullYear()).slice(-2);}if(fallback){var p=fallback.split('/');if(p.length===3){return p[0]+'/'+p[1]+'/'+String(p[2]).slice(-2);}return fallback;}return formatShortDate(new Date());}for(var i=0;i<filtered.length;i++){if(filtered[i].type==='diye') tSend+=filtered[i].amount;else tReceive+=filtered[i].amount;bal+= filtered[i].type==='liye'?filtered[i].amount:-filtered[i].amount;var tr=document.createElement('tr');tr.style.cursor='pointer';(function(id){tr.onclick=function(){editLedgerEntry(id);}})(filtered[i].id);var dateStr=shortDate(filtered[i].ts,filtered[i].date);var detStr=filtered[i].details||'-';if(detStr.length>15) detStr=detStr.substring(0,15)+'..';var sendHtml='';var receiveHtml='';if(filtered[i].type==='diye'){sendHtml='<span class="t-send">-'+filtered[i].amount+'</span>';receiveHtml='<span style="color:#cbd5e1">-</span>';}else{receiveHtml='<span class="t-receive">+'+filtered[i].amount+'</span>';sendHtml='<span style="color:#cbd5e1">-</span>';}tr.innerHTML='<td>'+dateStr+'</td><td style="font-size:11px;white-space:normal;word-break:break-word">'+detStr+'</td><td>'+sendHtml+'</td><td>'+receiveHtml+'</td><td style="font-weight:900">'+bal+'</td>';tbody.appendChild(tr);}document.getElementById('historyName').innerText=name+' - History';document.getElementById('hTotalSend').innerText=tSend;document.getElementById('hTotalReceive').innerText=tReceive;document.getElementById('hTotalBal').innerText=bal;document.getElementById('historyModal').classList.add('active');}
 function editLedgerEntry(id){var a=JSON.parse(localStorage.getItem('acc')||'[]');var found=null;for(var i=0;i<a.length;i++) if(a[i].id===id){found=a[i];break;}if(!found) return;editLedgerId=id;editLedgerType=found.type;document.getElementById('editLedgerAmount').value=found.amount;document.getElementById('editLedgerDetails').value=found.details||'';if(found.ts){var d=new Date(found.ts);var yyyy=d.getFullYear();var mm=String(d.getMonth()+1).padStart(2,'0');var dd=String(d.getDate()).padStart(2,'0');document.getElementById('editLedgerDate').value=yyyy+'-'+mm+'-'+dd;}setEditType(found.type);document.getElementById('editLedgerModal').classList.add('active');}
 function setEditType(t){editLedgerType=t;var s=document.getElementById('editTypeSend');var r=document.getElementById('editTypeReceive');if(t==='diye'){s.style.background='#ef4444';s.style.color='#fff';r.style.background='#f0fdf4';r.style.color='#15803d';}else{r.style.background='#16a34a';r.style.color='#fff';s.style.background='#fef2f2';s.style.color='#b91c1c';}}
-function saveLedgerEdit(){if(!editLedgerId) return;var newAmount=parseFloat(document.getElementById('editLedgerAmount').value);if(isNaN(newAmount)||newAmount<=0){alert('Valid amount!');return;}var newDateStr=document.getElementById('editLedgerDate').value;var newDetails=document.getElementById('editLedgerDetails').value.trim();var a=JSON.parse(localStorage.getItem('acc')||'[]');for(var i=0;i<a.length;i++) if(a[i].id===editLedgerId){a[i].amount=newAmount;a[i].type=editLedgerType;a[i].details=newDetails;if(newDateStr){var d=new Date(newDateStr);a[i].ts=d.getTime();a[i].date=formatShortDate(d);}break;}localStorage.setItem('acc',JSON.stringify(a));document.getElementById('editLedgerModal').classList.remove('active');openHistory(currentHistoryName);loadAcc();loadAccNames();showToast('Updated!');}
-function deleteLedgerEntry(){if(!editLedgerId) return;if(!confirm('Ye line delete karni hai?')) return;var a=JSON.parse(localStorage.getItem('acc')||'[]');a=a.filter(function(x){return x.id!==editLedgerId});localStorage.setItem('acc',JSON.stringify(a));document.getElementById('editLedgerModal').classList.remove('active');openHistory(currentHistoryName);loadAcc();loadAccNames();showToast('Deleted');}
-function clearPersonHistory(){if(!currentHistoryName) return;if(!confirm(currentHistoryName+' delete all?')) return;var a=JSON.parse(localStorage.getItem('acc')||'[]');a=a.filter(function(x){return x.name!==currentHistoryName});localStorage.setItem('acc',JSON.stringify(a));document.getElementById('historyModal').classList.remove('active');loadAcc();loadAccNames();showToast('Deleted');}
+function saveLedgerEdit(){if(!editLedgerId) return;var newAmount=parseFloat(document.getElementById('editLedgerAmount').value);if(isNaN(newAmount)||newAmount<=0){alert('Valid amount!');return;}var newDateStr=document.getElementById('editLedgerDate').value;var newDetails=document.getElementById('editLedgerDetails').value.trim();var a=JSON.parse(localStorage.getItem('acc')||'[]');for(var i=0;i<a.length;i++) if(a[i].id===editLedgerId){a[i].amount=newAmount;a[i].type=editLedgerType;a[i].details=newDetails;if(newDateStr){var d=new Date(newDateStr);a[i].ts=d.getTime();a[i].date=formatShortDate(d);}break;}localStorage.setItem('acc',JSON.stringify(a));document.getElementById('editLedgerModal').classList.remove('active');openHistory(currentHistoryName);loadAcc();loadAccNames();}
+function deleteLedgerEntry(){if(!editLedgerId) return;if(!confirm('Ye line delete karni hai?')) return;var a=JSON.parse(localStorage.getItem('acc')||'[]');a=a.filter(function(x){return x.id!==editLedgerId});localStorage.setItem('acc',JSON.stringify(a));document.getElementById('editLedgerModal').classList.remove('active');openHistory(currentHistoryName);loadAcc();loadAccNames();}
+function clearPersonHistory(){if(!currentHistoryName) return;if(!confirm(currentHistoryName+' delete all?')) return;var a=JSON.parse(localStorage.getItem('acc')||'[]');a=a.filter(function(x){return x.name!==currentHistoryName});localStorage.setItem('acc',JSON.stringify(a));document.getElementById('historyModal').classList.remove('active');loadAcc();loadAccNames();}
 function deleteYaad(){if(!confirm('Delete?'))return;var a=JSON.parse(localStorage.getItem('y')||'[]');a=a.filter(function(x){return x.id!==currentReadId});localStorage.setItem('y',JSON.stringify(a));closeRead();loadY();}
+function lockK(){document.getElementById('lockScreen').style.display='flex';v='';upd();}
+window.addEventListener('beforeinstallprompt', (e)=>{e.preventDefault();deferredPrompt=e;});
+function triggerInstall(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;});}else{alert('Browser menu > Add to Home Screen / Install App');}}
+function pickRainbowColor(e){
+  var picker=document.getElementById('hiddenColorPicker');
+  if(picker){ picker.click(); }
+}
+function setRainbowFromPicker(val){
+  tempThemeColor=val;
+  document.documentElement.style.setProperty('--primary', val);
+  var prev=document.getElementById('rainbowPreview');
+  if(prev) prev.style.background=val;
+  var hex=document.getElementById('rainbowHex');
+  if(hex) hex.innerText='Selected: '+val;
+}
+function saveThemeRainbow(){
+  var col=tempThemeColor;
+  localStorage.setItem('themeColor', col);
+  document.documentElement.style.setProperty('--primary', col);
+}
+(function(){var savedColor=localStorage.getItem('themeColor');if(savedColor){document.documentElement.style.setProperty('--primary', savedColor);tempThemeColor=savedColor;}})();
 async function makePdfFromDiv(htmlContent, fileName){
   var render=document.getElementById('pdfRender');
   render.innerHTML='<div id="pdfInner" style="width:750px;padding:0;background:#fff;color:#0f172a;font-family:Poppins,sans-serif">'+htmlContent+'</div>';
@@ -321,217 +413,37 @@ async function makePdfFromDiv(htmlContent, fileName){
   }
   pdf.save(fileName); render.innerHTML='';
 }
-async function downloadAllNamesPDF(){
-  var acc=JSON.parse(localStorage.getItem('acc')||'[]'); var map={};
-  for(var i=0;i<acc.length;i++){ if(!map[acc[i].name]) map[acc[i].name]=0; map[acc[i].name]+= acc[i].type==='liye'?acc[i].amount:-acc[i].amount; }
-  var total=0; Object.values(map).forEach(v=>total+=v);
-  var rows=''; Object.keys(map).forEach(function(k,i){
-    var bal=map[k]; var color=bal>=0?'#16a34a':'#ef4444'; var bg=i%2==0?'#ffffff':'#f8fafc'; var icon=bal>=0?'🟢':'🔴';
-    rows+='<tr style="background:'+bg+'"><td style="padding:13px 16px;border:1px solid #e2e8f0;font-weight:700">'+icon+' '+k+'</td><td style="padding:13px 16px;border:1px solid #e2e8f0;text-align:center;font-weight:900;color:'+color+';background:'+(bal>=0?'#f0fdf4':'#fef2f2')+'">'+bal+'</td></tr>';
-  });
-  var html='<div style="padding:20px"><h1 style="text-align:center;font-weight:900">HADI KI DAIRAY - HISAB</h1><table style="width:100%;border-collapse:collapse;margin-top:16px"><tr style="background:#0f172a;color:#fff"><th style="padding:12px;text-align:left">Name</th><th style="padding:12px;text-align:right">Balance</th></tr>'+rows+'<tr style="background:#f8fafc;font-weight:900"><td style="padding:12px;border-top:2px solid #0f172a">Total</td><td style="padding:12px;text-align:right;border-top:2px solid #0f172a">'+total+'</td></tr></table></div>';
-  await makePdfFromDiv(html,'HISAB-All-Names.pdf');
+async function downloadBookPDF(){
+  var a=JSON.parse(localStorage.getItem('y')||'[]');
+  var found=null;for(var i=0;i<a.length;i++) if(a[i].id===currentReadId){found=a[i];break;}
+  if(!found) return;
+  var html='<div style="padding:40px"><h1 style="font-size:28px">'+found.heading+'</h1><p style="color:#64748b">'+found.date+'</p><div style="margin-top:30px;font-size:22px;line-height:2;white-space:pre-wrap">'+found.text+'</div></div>';
+  await makePdfFromDiv(html, found.heading+'.pdf');
 }
 async function downloadPersonPDF(){
-  if(!currentHistoryName) return;
-  var acc=JSON.parse(localStorage.getItem('acc')||'[]');
-  var filtered=acc.filter(function(x){return x.name===currentHistoryName;}).sort(function(a,b){return a.ts-b.ts;});
-  var tSend=0, tReceive=0;
-  for(var i=0;i<filtered.length;i++){ if(filtered[i].type==='diye') tSend+=filtered[i].amount; else tReceive+=filtered[i].amount; }
-  var net=tReceive - tSend;
-  var rows=""; var running=0;
-  for(var i=0;i<filtered.length;i++){
-    var f=filtered[i]; running+= f.type==='liye'?f.amount:-f.amount;
-    var send = f.type==='diye' ? '<span style="color:#ef4444;font-weight:800">-'+f.amount+'</span>' : '-';
-    var receive = f.type==='liye' ? '<span style="color:#16a34a;font-weight:800">+'+f.amount+'</span>' : '-';
-    rows+='<tr><td style="padding:10px;border-bottom:1px solid #f1f5f9">'+(f.date||'')+'</td><td style="padding:10px;border-bottom:1px solid #f1f5f9">'+(f.details||'-')+'</td><td style="padding:10px;text-align:center;border-bottom:1px solid #f1f5f9">'+send+'</td><td style="padding:10px;text-align:center;border-bottom:1px solid #f1f5f9">'+receive+'</td><td style="padding:10px;text-align:center;font-weight:900;border-bottom:1px solid #f1f5f9">'+running+'</td></tr>';
-  }
-
-  var html='<div style="padding:20px;background:#fff;font-family:Poppins,sans-serif">'
-    +'<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #0f172a;padding-bottom:10px"><div style="font-size:16px;font-weight:900;color:#0f172a">'+currentHistoryName+' - History</div><div style="font-size:14px;font-weight:900;color:'+(net>=0?'#16a34a':'#ef4444')+'">Bal: '+net+'</div></div>'
-    +'<table style="width:100%;border-collapse:collapse;margin-top:12px;font-size:11px"><thead><tr style="background:#0f172a;color:#fff"><th style="padding:9px 6px;text-align:left">DATE</th><th style="padding:9px 6px;text-align:left">DETAILS</th><th style="padding:9px 6px;text-align:center">SEND</th><th style="padding:9px 6px;text-align:center">RECEIVE</th><th style="padding:9px 6px;text-align:center">BAL</th></tr></thead><tbody>'+rows+'</tbody></table>'
-    
-    // YEH HAI NAYA TOTAL - DABBON KI TARAH STYLE
-    +'<div style="margin-top:12px;border-top:2.5px solid #0f172a;padding-top:10px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px">'
-    +'<div style="background:#0f172a;color:#fff;border-radius:10px;padding:10px;text-align:center;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center">TOTAL</div>'
-    +'<div style="background:#fef2f2;border:1.5px solid #fecaca;border-radius:10px;padding:8px;text-align:center"><div style="font-size:7px;color:#ef4444;font-weight:800;letter-spacing:1px">SEND</div><div style="font-size:14px;font-weight:900;color:#ef4444">'+tSend+'</div></div>'
-    +'<div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:8px;text-align:center"><div style="font-size:7px;color:#16a34a;font-weight:800;letter-spacing:1px">RECEIVE</div><div style="font-size:14px;font-weight:900;color:#16a34a">'+tReceive+'</div></div>'
-    +'<div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:8px;text-align:center"><div style="font-size:7px;color:#0f172a;font-weight:800;letter-spacing:1px">BALANCE</div><div style="font-size:14px;font-weight:900;color:#0f172a">'+net+'</div></div>'
-    +'</div></div>';
-
-  await makePdfFromDiv(html, currentHistoryName+'-History.pdf');
+  var name=currentHistoryName;
+  var a=JSON.parse(localStorage.getItem('acc')||'[]');
+  var filtered=a.filter(x=>x.name===name);
+  var html='<div style="padding:30px"><h1>'+name+' - HISAB</h1><table style="width:100%;border-collapse:collapse;margin-top:20px"><tr><th>Date</th><th>Details</th><th>Amount</th><th>Type</th></tr>';
+  for(var i=0;i<filtered.length;i++){html+='<tr><td>'+(filtered[i].date||'')+'</td><td>'+(filtered[i].details||'')+'</td><td>'+filtered[i].amount+'</td><td>'+filtered[i].type+'</td></tr>';}
+  html+='</table></div>';
+  await makePdfFromDiv(html, name+'-hisab.pdf');
 }
-async function downloadBookPDF(){
-  try{
-    var headEl=document.getElementById('readHeadView');
-    var textEl=document.getElementById('readTextView');
-    var head=headEl ? headEl.innerText.trim() : 'خوابوں کی کہانی';
-    var text=textEl ? textEl.innerText : '';
-    var fontClass=textEl ? textEl.className : 'f-urdu1';
-    
-    showToast('Download PDF...');
-    
-    // Logo - yahan apna logo ka link lagao
-    var LOGO_URL = 'https://i.ibb.co/your-logo.png'; // <-- apna logo yahan dalo
-    // Agar logo nahi to ye khali chor do, main neeche text logo laga diya hai
-    
-    var tempDiv=document.createElement('div');
-    tempDiv.style.cssText='position:fixed;left:-9999px;top:0;width:540px;font-size:18px;line-height:2.2;padding:0;visibility:hidden;white-space:pre-wrap;overflow-wrap:break-word;word-break:break-word;';
-    tempDiv.className=fontClass;
-    document.body.appendChild(tempDiv);
-    
-    var paras=text.split('\n');
-    var pages=[]; var cur='';
-    for(var i=0;i<paras.length;i++){
-      var line=paras[i]; // bilkul same line rakho, trim nahi
-      var test=cur ? cur+'\n'+line : line;
-      tempDiv.innerText=test;
-      if(tempDiv.scrollHeight>820 && cur){
-        pages.push(cur); cur=line;
-      }else{cur=test;}
-    }
-    if(cur) pages.push(cur);
-    document.body.removeChild(tempDiv);
-    
-    var pdf=new jspdf.jsPDF('p','mm','a4');
-    var pageW=pdf.internal.pageSize.getWidth();
-    var pageH=pdf.internal.pageSize.getHeight();
-    var render=document.getElementById('pdfRender');
-    
-    for(var pIdx=0;pIdx<pages.length;pIdx++){
-      if(pIdx>0) pdf.addPage();
-      render.innerHTML='';
-      
-      var wrap=document.createElement('div');
-      wrap.id='pdfInner';
-      // Tasveer jaisa cream paper + golden border
-      wrap.style.cssText='width:650px;min-height:1050px;background:#FFFECC;border:5px solid #E6C54A;box-sizing:border-box;padding:0;overflow:hidden;position:relative;';
-      
-      // Andar white cream
-      var inner=document.createElement('div');
-      inner.style.cssText='padding:22px 26px 20px 26px;';
-      
-      // Logo + HADI KI DAIRAY - top pe chota
-      var topBar=document.createElement('div');
-      topBar.style.cssText='display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;';
-      
-      var logoBox=document.createElement('div');
-      // Agar aap ka logo image hai to yahan ayega
-      logoBox.style.cssText='font-family:Poppins,sans-serif;font-weight:900;font-size:11px;color:#8B7500;background:#FFF4B0;border:1px solid #E6C54A;padding:4px 10px;border-radius:20px;';
-      logoBox.innerText='HADI KI DAIRAY';
-      
-      // Logo image agar ho to
-      // var logoImg=document.createElement('img');
-      // logoImg.src=LOGO_URL;
-      // logoImg.style.cssText='width:50px;height:50px;object-fit:contain;';
-      
-      var pageNum=document.createElement('div');
-      pageNum.style.cssText='font-size:10px;color:#8B7500;font-family:Poppins;';
-      pageNum.innerText=(pIdx+1)+'/'+pages.length;
-      
-      topBar.appendChild(logoBox);
-      topBar.appendChild(pageNum);
-      inner.appendChild(topBar);
-      
-      if(pIdx===0){
-        var headTitle=document.createElement('div');
-        headTitle.className=fontClass;
-        // Bilkul tasveer jaisa laal heading center me
-        headTitle.style.cssText='font-size:32px;font-weight:900;color:#C00000;text-align:center;margin:0 0 28px 0;line-height:1.4;';
-        headTitle.innerText=head;
-        inner.appendChild(headTitle);
-      }
-      
-      var p=document.createElement('p');
-      p.className=fontClass;
-      // Bilkul tasveer jaisa saaf kaala lafz, lines same
-      p.style.cssText='font-size:17px;line-height:2.2;color:#000000;white-space:pre-wrap;text-align:justify;direction:rtl;margin:0;overflow-wrap:break-word;word-break:break-word;max-width:100%;font-weight:500;';
-      p.innerText=pages[pIdx];
-      inner.appendChild(p);
-      
-      wrap.appendChild(inner);
-      render.appendChild(wrap);
-      
-      if(document.fonts) await document.fonts.ready;
-      await new Promise(function(r){setTimeout(r,600);});
-      
-      var canvas=await html2canvas(wrap,{scale:2.5,useCORS:true,backgroundColor:'#FFFECC'});
-      var imgData=canvas.toDataURL('image/jpeg',0.95);
-      pdf.addImage(imgData,'JPEG',0,0,pageW,pageH);
-      render.innerHTML='';
-    }
-    
-    pdf.save(head+'.pdf');
-    showToast('PDF Done! ✅');
-    
-  }catch(e){
-    console.error(e);
-    showToast('Error:'+e.message);
-    var r=document.getElementById('pdfRender');
-    if(r) r.innerHTML='';
-  }
+async function downloadAllNamesPDF(){
+  var acc=JSON.parse(localStorage.getItem('acc')||'[]'); var map={};
+  for(var i=0;i<acc.length;i++){ if(!map[acc[i].name])map[acc[i].name]=0; map[acc[i].name]+= acc[i].type==='liye'?acc[i].amount:-acc[i].amount; }
+  var html='<div style="padding:30px"><h1>HISAB - All Names</h1><table style="width:100%;border-collapse:collapse;margin-top:20px"><tr><th>Name</th><th>Balance</th></tr>';
+  for(var k in map){html+='<tr><td>'+k+'</td><td>'+map[k]+'</td></tr>';}
+  html+='</table></div>';
+  await makePdfFromDiv(html, 'All-Names-Hisab.pdf');
 }
-function lockK(){document.getElementById('lockScreen').style.display='flex';v='';upd();}
-function triggerInstall(){if(deferredPrompt){deferredPrompt.prompt();}else{alert('Install: Browser menu > Add to Home Screen');}}
-function pickRainbowColor(e){document.getElementById('hiddenColorPicker').click();}
-function setRainbowFromPicker(val){tempThemeColor=val;document.getElementById('rainbowPreview').style.background=val;document.getElementById('rainbowHex').innerText='Current: '+val;document.documentElement.style.setProperty('--primary',val);}
-function saveThemeRainbow(){document.documentElement.style.setProperty('--primary',tempThemeColor);localStorage.setItem('themeColor',tempThemeColor);showToast('Theme Saved: '+tempThemeColor);}
-window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;});
-document.addEventListener('DOMContentLoaded',function(){
-  var savedFont=localStorage.getItem('selFont'); if(savedFont) currentFont=savedFont;
-  var tc=localStorage.getItem('themeColor'); if(tc){tempThemeColor=tc;document.documentElement.style.setProperty('--primary',tc); var rp=document.getElementById('rainbowPreview'); if(rp) rp.style.background=tc; var rh=document.getElementById('rainbowHex'); if(rh) rh.innerText='Current: '+tc;}
+window.onload=function(){
+  var sf=localStorage.getItem('selFont'); if(sf){ currentFont=sf; }
   applyFont();
-  var amtEl=document.getElementById('accAmount');
-  if(amtEl){
-    amtEl.addEventListener('keydown',function(e){
-      if(e.key==='Enter'){
-        e.preventDefault();
-        saveDirect();
-      }
-    });
-  }
-  var detailEl=document.getElementById('newDetailInside');
-  if(detailEl){
-    detailEl.addEventListener('keydown',function(e){
-      if(e.key==='Enter'){
-        e.preventDefault();
-        saveDetailFromInside();
-      }
-    });
-  }
-  loadY(); loadAcc(); selectAccType('receive');
-});
-function makeReadViewStylish(){
-  var h=document.getElementById('readHeadView');
-  var t=document.getElementById('readTextView');
-  if(!h||!t) return;
-  h.style.fontSize='28px';
-  h.style.fontWeight='900';
-  h.style.textAlign='center';
-  t.style.fontSize='20px';
-  t.style.lineHeight='2';
-  t.style.padding='24px 20px';
-  t.style.margin='10px';
-  t.style.borderLeft='5px solid #16a34a';
-  t.style.borderRight='5px solid #16a34a';
-  t.style.borderRadius='10px';
-  t.style.wordBreak='break-word';
+  var p=getP();
+  if(!p){ document.getElementById('welcome').style.display='flex'; }
+  else{ document.getElementById('welcome').style.display='none'; document.getElementById('lockScreen').style.display='flex'; upd(); }
 }
-
-// Auto chal jaye ga
-setInterval(makeReadViewStylish, 1000);
-</script><script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  const firebaseConfig = {
-  apiKey: "AIzaSyAhG5mO1X-5z2DFMgpoip6p0erYyOZe6Sc",
-  authDomain: "hadi-ki-dairay.firebaseapp.com",
-  projectId: "hadi-ki-dairay",
-  storageBucket: "hadi-ki-dairay.firebasestorage.app",
-  messagingSenderId: "821495126488",
-  appId: "1:821495126488:web:c60cb90763982b72da3aad"
-};
-  const app = initializeApp(firebaseConfig);
-  window.db = getFirestore(app);
-  console.log("HADI KI DAIRAY Connected! MashaAllah");
-</script></body></html>
+</script>
+</body>
+</html>
