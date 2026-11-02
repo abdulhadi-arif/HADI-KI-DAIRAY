@@ -525,5 +525,17 @@ function makeReadViewStylish(){
 // Auto chal jaye ga
 setInterval(makeReadViewStylish, 1000);
 </script>
+<script>
+// HADI OFFLINE FIX - 100% OFFLINE + CLOUD SYNC
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('./sw.js?v=5').then(function(){
+      console.log('HADI Offline Ready ✅');
+    });
+  });
+}
+</script>
+</body>
+</html>
 </body>
   </html>
